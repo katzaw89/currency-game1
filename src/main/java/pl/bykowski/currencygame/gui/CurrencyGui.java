@@ -8,6 +8,10 @@ import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.router.Route;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.context.SecurityContextImpl;
+import org.springframework.security.oauth2.provider.OAuth2Authentication;
 import pl.bykowski.currencygame.controller.CurrencyClient;
 
 import java.math.BigDecimal;
@@ -47,7 +51,7 @@ public class CurrencyGui extends VerticalLayout {
                 labelResult.setText(winMessage);
                 labelFinnalResult.setText("GRATULACJE! udao się za " + counter.incrementAndGet());
 
-                add(new Image("https://media1.giphy.com/media/2sXf9PbHcEdE1x059I/giphy.gif","super!"));
+                add(new Image("https://media1.giphy.com/media/2sXf9PbHcEdE1x059I/giphy.gif", "super!"));
 
             } else if (result >= 1) {
                 labelResult.setText(smallMessage);
@@ -63,5 +67,8 @@ public class CurrencyGui extends VerticalLayout {
 
 
         add(hl1, hl2, labelFinnalResult);
+
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        System.out.println(principal);
     }
 }
