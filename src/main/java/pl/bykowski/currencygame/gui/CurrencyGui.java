@@ -8,21 +8,21 @@ import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.router.Route;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.context.SecurityContextImpl;
-import org.springframework.security.oauth2.provider.OAuth2Authentication;
 import pl.bykowski.currencygame.controller.CurrencyClient;
+import pl.bykowski.currencygame.entity.CurrencyRank;
+import pl.bykowski.currencygame.repo.CurrenctRankRepo;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.time.LocalDate;
 import java.util.concurrent.atomic.AtomicInteger;
 
 @Route("game")
 public class CurrencyGui extends VerticalLayout {
 
     @Autowired
-    public CurrencyGui(CurrencyClient currencyClient) {
+    public CurrencyGui(CurrencyClient currencyClient, CurrenctRankRepo currenctRankRepo) {
         AtomicInteger counter = new AtomicInteger();
         Label labelFinnalResult = new Label("Liczba podejść");
 
@@ -52,7 +52,9 @@ public class CurrencyGui extends VerticalLayout {
                 labelFinnalResult.setText("GRATULACJE! udao się za " + counter.incrementAndGet());
 
                 add(new Image("https://media1.giphy.com/media/2sXf9PbHcEdE1x059I/giphy.gif", "super!"));
-
+                Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+                CurrencyRank currencyRank = new CurrencyRank(principal.toString(), counter.get(), LocalDate.now());
+                currenctRankRepo.save(currencyRank);
             } else if (result >= 1) {
                 labelResult.setText(smallMessage);
                 labelFinnalResult.setText("Liczba podejść: " + counter.incrementAndGet());
