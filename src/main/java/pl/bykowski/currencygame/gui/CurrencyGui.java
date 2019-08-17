@@ -45,7 +45,7 @@ public class CurrencyGui extends VerticalLayout {
             String greaterMessage = "za mało";
             if (result == 0) {
                 labelResult.setText(winMessage);
-                labelFinnalResult.setText("GRATULACJE! udao się za " + counter.get());
+                labelFinnalResult.setText("GRATULACJE! udao się za " + counter.incrementAndGet());
 
                 add(new Image("https://media1.giphy.com/media/2sXf9PbHcEdE1x059I/giphy.gif","super!"));
 
